@@ -4,13 +4,19 @@
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/laravel-shift/jwt-auth.git"
+    }],
     "require": {
         "php": "^8.0.2",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "silber/bouncer": "v1.0.0-rc.12",
+        "tymon/jwt-auth": "dev-l9-compatibility"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
