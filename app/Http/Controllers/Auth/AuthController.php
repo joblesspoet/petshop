@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -20,6 +21,7 @@ use Tymon\JWTAuth\Validators\PayloadValidator;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Notifications\PasswordResetNotification;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -186,6 +188,41 @@ class AuthController extends Controller
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
+    /**
+     * Request a password reset email.
+     *
+     * @param \Illuminate\Contracts\Hashing\Hasher $hasher
+     * @param \Modules\ApplicationAuth\Http\Requests\Auth\ForgotPasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function forgot(Hasher $hasher, ForgotPasswordRequest $request): JsonResponse
+    {
+        /** @var \App\Models\User $model */
+        $model = User::class;
+
+        $user = ($query = $model::query())
+            ->where($query->qualifyColumn('email'), $request->input('email'))
+            ->first();
+
+        if (!$user || !$user->email) {
+            throw ValidationException::withMessages(['email' => [trans('passwords.user')]]);
+        }
+
+        $resetPasswordToken = str_pad(random_int(1, 99999999), 8, '0', STR_PAD_LEFT);
+
+        $user->fill(
+            [
+                'reset_password_token' => $hasher->make($resetPasswordToken),
+                'reset_password_token_expires' => Carbon::now()->addMinutes(60),
+            ]
+        );
+        $user->save();
+
+        $user->notify(new PasswordResetNotification($resetPasswordToken));
+
+        return new JsonResponse(['message' => trans('passwords.sent')]);
+    }
 
     /**
      * The email to use for the authentication throttle.
