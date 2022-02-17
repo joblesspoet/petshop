@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Webpatser\Uuid\Uuid;
 use Jdenticon\Identicon;
@@ -19,6 +20,7 @@ class UserObserver
     public function creating(User $user): void
     {
         $user->uuid = (string) Uuid::generate(4);
+        $user->email_verified_at = Carbon::now();
 
         if (!$user->avatar) {
             if ($placeholder = Config::get('avatar_placeholder')) {

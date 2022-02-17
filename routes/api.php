@@ -23,10 +23,7 @@ Route::group([
     'prefix' => 'v1'
 ], function ($router) {
 
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
-
-    // Route::post('logout', );
-    // Route::post('refresh', 'AuthController@refresh');
-    // Route::post('me', 'AuthController@me');
+    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('login', [AuthController::class, 'login'])->name('login');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });

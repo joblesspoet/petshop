@@ -240,4 +240,9 @@ class User extends Authenticatable implements JWTSubject, HasMedia
 
         throw new \InvalidArgumentException("Expected another media record, a url, a data uri or a file");
     }
+
+    public function username()
+    {
+        return 'email';
+    }
 }
