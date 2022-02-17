@@ -194,4 +194,8 @@ return [
         // ...
     ])->toArray(),
 
+    /*
+     * The placeholder to use for the avatar.
+     */
+    'avatar_placeholder' => null,
 ];
