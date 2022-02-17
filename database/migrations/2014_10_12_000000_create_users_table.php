@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('phone_number')->nullable();
             $table->boolean('is_marketing')->default(false);
+            $table->string('reset_password_token')->nullable();
+            $table->timestamp('reset_password_token_expires')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -19,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\Events\Logout;
 use Tymon\JWTAuth\Validators\PayloadValidator;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
@@ -222,6 +223,52 @@ class AuthController extends Controller
         $user->notify(new PasswordResetNotification($resetPasswordToken));
 
         return new JsonResponse(['message' => trans('passwords.sent')]);
+    }
+
+    /**
+     * Perform a password reset.
+     *
+     * @param \Illuminate\Contracts\Hashing\Hasher $hasher
+     * @param \App\Http\Requests\Auth\ResetPasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function resetPassword(Hasher $hasher, ResetPasswordRequest $request): JsonResponse
+    {
+        $attributes = $request->validated();
+
+        /** @var \App\Models\User $model */
+        $model = User::class;
+
+        $user = ($query = $model::query())
+            ->where('email', $attributes['email'])
+            ->first();
+
+        if (!$user) {
+            throw ValidationException::withMessages(['email' => [trans('passwords.user')]]);
+        }
+
+        if (
+            !$hasher->check($attributes['reset_password_token'], $user->reset_password_token) ||
+            !$user->reset_password_token_expires ||
+            $user->reset_password_token_expires->isPast()
+        ) {
+            throw ValidationException::withMessages(['reset_password_token' => [trans('passwords.token')]]);
+        }
+
+        $user->fill(
+            [
+                'reset_password_token' => null,
+                'reset_password_token_expires' => null,
+                'password' => $hasher->make($attributes['password']),
+            ]
+        );
+
+        $user->save();
+
+        $token = $this->guard->login($user);
+
+        return $this->tokenResponse($token, $user);
     }
 
     /**

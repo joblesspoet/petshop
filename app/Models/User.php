@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -43,7 +44,7 @@ use Symfony\Component\Mime\MimeTypes;
  * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser query()
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements JWTSubject, HasMedia
+class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPassword
 {
     use HasRolesAndAbilities;
     use HasFactory;
@@ -74,7 +75,9 @@ class User extends Authenticatable implements JWTSubject, HasMedia
         'email_verified_at',
         'address',
         'avatar',
-        'phone_number'
+        'phone_number',
+        'reset_password_token',
+        'reset_password_token_expires',
     ];
 
     /**
@@ -95,6 +98,7 @@ class User extends Authenticatable implements JWTSubject, HasMedia
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_marketing' => 'boolean',
+        'reset_password_token_expires' => 'datetime'
     ];
 
 

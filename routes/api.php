@@ -27,6 +27,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('forgot', [AuthController::class, 'forgot'])->name('forgot.password');
+    Route::post('reset/password', [AuthController::class, 'resetPassword'])->name('forgot.password');
 
 
 });
