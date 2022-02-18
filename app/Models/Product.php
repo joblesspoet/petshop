@@ -6,27 +6,42 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+use function PHPSTORM_META\map;
 
 /**
  * Modules\ApplicationAuth\Entities\ApplicationUser
  *
  * @property int $id
  * @property string $uuid
- * @property int $user_id
+ * @property int $category_id
  * @property string $title
- * @property string slug
+ * @property string $description
+ * @property float $price
+ * @property json $metadata
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser belongsTo()
  * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser query()
  * @mixin \Eloquent
  */
-class Category extends Model
+
+class Product extends Model
 {
     use HasFactory;
     use Sluggable;
+
+    /** @var const */
+    const STATUS_ACTIVE = "active";
+    const STATUS_INACTIVE = "inactive";
+
+    /** @var array */
+    const AVAILABLE_STATUS = [
+        self::STATUS_ACTIVE,
+        self::STATUS_INACTIVE,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -34,10 +49,12 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
+        'category_id',
         'uuid',
         'title',
-        'slug',
+        'price',
+        'description',
+        'metadata'
     ];
 
 
@@ -49,6 +66,8 @@ class Category extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'metadata'   => 'json'
     ];
 
     /**
@@ -66,24 +85,11 @@ class Category extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|\App\Models\User
      */
-    public function user(): BelongsTo
+    public function category(): BelongsTo
     {
         return $this
             ->belongsTo(
-                User::class
-            );
-    }
-
-    /**
-     * categories function
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany|\App\Models\User
-     */
-    public function products(): BelongsToMany
-    {
-        return $this
-            ->belongsToMany(
-                Product::class
+                Category::class
             );
     }
 

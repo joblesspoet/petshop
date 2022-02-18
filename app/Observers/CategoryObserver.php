@@ -17,7 +17,7 @@ class CategoryObserver
     public function creating(Category $category): void
     {
         $category->uuid = (string) Uuid::generate(4);
-        $category->user_id = Auth::user()->id;
+        // $category->user_id = Auth::user()->id;
     }
 
     /**

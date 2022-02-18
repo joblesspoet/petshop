@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Product\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,13 @@ Route::group([
         Route::post('create', [CategoryController::class, 'store'])->name('category.create');
         Route::get('{uuid}',[CategoryController::class, 'show'])->name('category.show');
         Route::match(['put', 'patch'], '{uuid}', [CategoryController::class, 'update'])->name('category.update');
-        Route::delete('{uuid}', [CategoryController::class, 'store'])->name('category.delete');
+        Route::delete('{uuid}', [CategoryController::class, 'destroy'])->name('category.delete');
+    });
+
+    Route::middleware('auth:api')->prefix('product')->group(function () {
+        Route::post('create', [ProductController::class, 'store'])->name('product.create');
+        Route::get('{uuid}',[ProductController::class, 'show'])->name('product.show');
+        Route::match(['put', 'patch'], '{uuid}', [ProductController::class, 'update'])->name('product.update');
+        Route::delete('{uuid}', [ProductController::class, 'destroy'])->name('product.delete');
     });
 });

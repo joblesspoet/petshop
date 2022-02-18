@@ -4,21 +4,25 @@ namespace App\Http\Controllers\Category;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SearchableTrait;
+use App\Http\Controllers\Traits\GetUser;
 use App\Http\Controllers\Traits\SortableTrait;
 use App\Http\Requests\Category\CreateCategory;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\DB;
+
 
 class CategoryController extends Controller
 {
     use SearchableTrait;
     use SortableTrait;
-
+    use GetUser;
 
     /**
      * Display a listing of the Category.
@@ -58,13 +62,13 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return JsonResponse
      */
-    public function store(CreateCategory $request, User $user): JsonResponse
+    public function store(CreateCategory $request): JsonResponse
     {
         //
         $attributes = $request->validated();
-        return DB::transaction(function () use ($attributes, $user) {
-
-            Category::create($attributes);
+        $objUser = $this->getUser();
+        return DB::transaction(function () use ($attributes, $objUser) {
+            $objUser->categories()->create($attributes);
 
             return new JsonResponse([
                 'message' => __('Category successfully')
@@ -80,6 +84,7 @@ class CategoryController extends Controller
      */
     public function show(Category $uuid): CategoryResource
     {
+        $this->authorize('show', $uuid);
         //
         return CategoryResource::make($uuid);
     }
@@ -87,23 +92,34 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  UpdateCategoryRequest  $request
+     * @param  Category  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCategoryRequest $request, $uuid)
     {
         //
+        $this->authorize('update', $uuid);
+        $uuid->update($request->only('title'));
+        return CategoryResource::make($uuid);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Category $uuid
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $uuid)
     {
+        $this->authorize('destroy', $uuid);
         //
+
+        return DB::transaction(function () use ($uuid) {
+            $uuid->delete();
+            return new JsonResponse([
+                'message' => __('Category deleted successfully')
+            ], JsonResponse::HTTP_NO_CONTENT);
+        });
     }
 }
