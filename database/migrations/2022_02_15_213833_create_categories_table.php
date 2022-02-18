@@ -16,9 +16,14 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
-            $table->string('title')->unique();
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->string('title');
             $table->string('slug');
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

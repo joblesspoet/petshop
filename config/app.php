@@ -198,4 +198,9 @@ return [
      * The placeholder to use for the avatar.
      */
     'avatar_placeholder' => null,
+    /**
+     * Record per page
+     */
+    'record_per_page' => 25,
+
 ];

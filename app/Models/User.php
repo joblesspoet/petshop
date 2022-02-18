@@ -6,6 +6,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
@@ -243,5 +244,15 @@ class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPass
         }
 
         throw new \InvalidArgumentException("Expected another media record, a url, a data uri or a file");
+    }
+
+    /**
+     * categories function
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Category
+     */
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class);
     }
 }
