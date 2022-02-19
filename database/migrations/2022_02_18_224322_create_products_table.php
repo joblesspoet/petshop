@@ -19,16 +19,16 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('uuid');
-            $table->bigInteger('category_uuid')->unsigned()->index();
+            $table->bigInteger('category_id')->unsigned()->index();
             $table->string('title');
-            $table->float('price');
+            $table->double('price');
             $table->text('description')->nullable();
             $table->json('metadata')->nullable();
             $table->enum('status', Product::AVAILABLE_STATUS);
             $table->timestamps();
-            $table->date('deleted_at');
+            $table->date('deleted_at')->nullable();
 
-            $table->foreign('category_uuid')
+            $table->foreign('category_id')
                 ->references('id')->on(Models::table('categories'))
                 ->onDelete('cascade');
         });
