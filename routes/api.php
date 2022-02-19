@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Product\ProductController;
@@ -22,6 +23,19 @@ Route::group([
     'prefix' => 'v1'
 ], function ($router) {
 
+    // admin routes.
+    Route::prefix('admin')->group(function () {
+        Route::post('login', [AuthController::class, 'login'])->name('login');
+        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+        Route::post('forgot', [AuthController::class, 'forgot'])->name('forgot.password');
+        Route::post('reset/password', [AuthController::class, 'resetPassword'])->name('forgot.password');
+
+        Route::middleware(['auth:api','admin'])->group(function () {
+            Route::get('user-listing', [AdminController::class, 'index'])->name('admin.user.listing');
+            Route::post('create', [AdminController::class, 'store'])->name('admin.create');
+        });
+    });
+
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -32,14 +46,14 @@ Route::group([
 
     Route::middleware('auth:api')->prefix('category')->group(function () {
         Route::post('create', [CategoryController::class, 'store'])->name('category.create');
-        Route::get('{uuid}',[CategoryController::class, 'show'])->name('category.show');
+        Route::get('{uuid}', [CategoryController::class, 'show'])->name('category.show');
         Route::match(['put', 'patch'], '{uuid}', [CategoryController::class, 'update'])->name('category.update');
         Route::delete('{uuid}', [CategoryController::class, 'destroy'])->name('category.delete');
     });
 
     Route::middleware('auth:api')->prefix('product')->group(function () {
         Route::post('create', [ProductController::class, 'store'])->name('product.create');
-        Route::get('{uuid}',[ProductController::class, 'show'])->name('product.show');
+        Route::get('{uuid}', [ProductController::class, 'show'])->name('product.show');
         Route::match(['put', 'patch'], '{uuid}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('{uuid}', [ProductController::class, 'destroy'])->name('product.delete');
     });
