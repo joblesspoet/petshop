@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
+use App\Observers\BrandObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\ProductObserver;
 use App\Observers\UserObserver;
@@ -33,5 +35,6 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Category::observe(CategoryObserver::class);
         Product::observe(ProductObserver::class);
+        Brand::observe(BrandObserver::class);
     }
 }
