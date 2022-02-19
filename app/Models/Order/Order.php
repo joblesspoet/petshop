@@ -33,7 +33,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Order extends Model
 {
     use HasFactory;
-    use Sluggable;
     /**
      * The attributes that are mass assignable.
      *

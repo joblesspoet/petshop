@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Post extends Model
 {
     use HasFactory;
-    use Slugable;
+    use Sluggable;
 
 
     /**
