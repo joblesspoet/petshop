@@ -76,10 +76,10 @@ class AuthController extends Controller
     public function register(Hasher $hasher, RegisterRequest $request): JsonResponse
     {
 
-        /** @var \Modules\ApplicationAuth\Entities\ApplicationUser $user */
+        /** @var App\Models\User $user */
         $user = $this->guard->user();
 
-        /** @var \Modules\ApplicationAuth\Entities\ApplicationUser $model */
+        /** @var App\Models\User $model */
         $model = User::class;
 
         $attributes = Arr::except($request->validated(), ['password']);
@@ -173,7 +173,7 @@ class AuthController extends Controller
      */
     public function logout(): JsonResponse
     {
-        /** @var \Modules\ApplicationAuth\Entities\ApplicationUser $user */
+        /** @var App\Models\User $user */
         $user = $this->guard->user();
 
         try {
@@ -309,7 +309,7 @@ class AuthController extends Controller
 
             $originalTokenId = $this->getTokenId();
 
-            /** @var \Modules\ApplicationAuth\Entities\ApplicationUser $user */
+            /** @var App\Models\User $user */
             $user = $this->guard->user();
 
             try {
@@ -367,7 +367,7 @@ class AuthController extends Controller
 
         $now = Carbon::now()->timestamp;
 
-        /** @var \Modules\ApplicationAuth\Entities\ApplicationUser $model */
+        /** @var App\Models\User $model */
         $model = User::class;
         $user = $model::findOrFail($payload->get('sub'));
 

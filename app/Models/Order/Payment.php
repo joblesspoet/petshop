@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 /**
- * Modules\ApplicationAuth\Entities\ApplicationUser
+ * App\Models\User
  *
  * @property int $id
  * @property string $uuid
@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property json $detail
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @mixin \Eloquent
  */
 class Payment extends Model

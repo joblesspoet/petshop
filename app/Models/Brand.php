@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 
 /**
- * Modules\ApplicationAuth\Entities\ApplicationUser
+ * App\Models\User
  *
  * @property int $id
  * @property string $uuid
@@ -15,8 +15,8 @@ use Cviebrock\EloquentSluggable\Sluggable;
  * @property string slug
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @mixin \Eloquent
  */
 

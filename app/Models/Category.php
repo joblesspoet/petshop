@@ -9,7 +9,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * Modules\ApplicationAuth\Entities\ApplicationUser
+ * App\Models\User
  *
  * @property int $id
  * @property string $uuid
@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string slug
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser belongsTo()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User belongsTo()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @mixin \Eloquent
  */
 class Category extends Model

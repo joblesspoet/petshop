@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * Modules\ApplicationAuth\Entities\ApplicationUser
+ * App\Models\User
  *
  * @property int $id
  * @property string $uuid
@@ -40,9 +40,9 @@ use Symfony\Component\Mime\MimeTypes;
  * @property boolean $is_marketing
  * @property \Spatie\MediaLibrary\MediaCollections\Models\Media|null $avatar
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|Media[] $media
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPassword

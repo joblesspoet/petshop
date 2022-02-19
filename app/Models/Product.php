@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Cviebrock\EloquentSluggable\Sluggable;
 
-use function PHPSTORM_META\map;
-
 /**
- * Modules\ApplicationAuth\Entities\ApplicationUser
+ * App\Models\User
  *
  * @property int $id
  * @property string $uuid
@@ -22,9 +20,9 @@ use function PHPSTORM_META\map;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser belongsTo()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ApplicationUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User belongsTo()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @mixin \Eloquent
  */
 
