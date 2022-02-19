@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Order;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -254,5 +255,15 @@ class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPass
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
+    }
+
+    /**
+     * user order function
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Order\Order
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }
