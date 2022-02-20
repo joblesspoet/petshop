@@ -1,6 +1,6 @@
 <?php
 
-namespace Traits;
+namespace App\Http\Controllers\Traits;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
@@ -21,15 +21,15 @@ trait AppUtilityTrait
         /** @var array $models */
         $models = Relation::morphMap();
 
-        if(!array_key_exists($type, $models)){
+        if (!array_key_exists($type, $models)) {
             throw (new ModelNotFoundException());
         }
 
         /** @var \Illuminate\Support\Collection */
         $modelClass = collect($models)
-        ->get($type);
+            ->get($type);
 
-        if(is_null($id)){
+        if (is_null($id)) {
             return $modelClass;
         }
 
@@ -44,11 +44,11 @@ trait AppUtilityTrait
      */
     public function obfuscateEmail(string $email): string
     {
-        $em   = explode("@",$email);
-        $name = implode('@', array_slice($em, 0, count($em)-1));
-        $len  = floor(strlen($name)/2);
+        $em   = explode("@", $email);
+        $name = implode('@', array_slice($em, 0, count($em) - 1));
+        $len  = floor(strlen($name) / 2);
 
-        return substr($name,0, $len) . str_repeat('*', $len) . "@" . end($em);
+        return substr($name, 0, $len) . str_repeat('*', $len) . "@" . end($em);
     }
 
     /**
@@ -73,15 +73,15 @@ trait AppUtilityTrait
         return collect($array)
             ->combine(
                 collect($array)
-                ->map(
-                    function(string $item){
-                        if (strpos($item, '_')) {
-                            // contains an underscore and is two words
-                            return $this->replaceUnderScoreBySpaces($item);
+                    ->map(
+                        function (string $item) {
+                            if (strpos($item, '_')) {
+                                // contains an underscore and is two words
+                                return $this->replaceUnderScoreBySpaces($item);
+                            }
+                            return ucfirst(__($item));
                         }
-                        return ucfirst(__($item));
-                    }
-                )
+                    )
             )
             ->all();
     }
@@ -108,7 +108,7 @@ trait AppUtilityTrait
      * @param string $folder
      * @return string
      */
-    private function lastIndexOfExplodedFolder(string $folder) : string
+    private function lastIndexOfExplodedFolder(string $folder): string
     {
         $explodedFolder = explode('/', $folder);
         $lastIndexOfFolder = $explodedFolder[sizeof($explodedFolder) - 1];

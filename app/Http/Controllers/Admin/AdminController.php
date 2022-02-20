@@ -34,8 +34,8 @@ class AdminController extends Controller
         $user = $this->getUser();
         /** @var \App\Models\User $query */
         ($query = User::query());
-        $query->whereNotIn('id',[$user->id])
-        ->whereIs(User::ROLE_ADMIN);
+        $query->whereNotIn('id', [$user->id])
+            ->whereIs(User::ROLE_ADMIN);
 
         $this->applySearching($request, $query);
         $this->applySorting($request, $query);
@@ -91,40 +91,5 @@ class AdminController extends Controller
             ],
             JsonResponse::HTTP_OK
         );
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

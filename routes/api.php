@@ -52,6 +52,8 @@ Route::group([
         Route::delete('{uuid}', [CategoryController::class, 'destroy'])->name('category.delete');
     });
 
+    Route::get('products', [ProductController::class, 'index'])->name('products');
+
     Route::middleware('auth:api')->prefix('product')->group(function () {
         Route::post('create', [ProductController::class, 'store'])->name('product.create');
         Route::get('{uuid}', [ProductController::class, 'show'])->name('product.show');

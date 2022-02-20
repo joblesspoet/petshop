@@ -136,6 +136,6 @@ class MediaResource extends JsonResource
             ? $this->getConversionsDiskDriverName()
             : $this->getDiskDriverName();
 
-        return $diskDriverName === 's3';
+        return $diskDriverName === 'public';
     }
 }

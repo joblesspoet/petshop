@@ -26,11 +26,25 @@ class StoreProductRequest extends FormRequest
     {
         return [
             //
+            'category_id' => [
+                'required',
+                'exists:App\Models\Category,id',
+            ],
             'title' => [
                 'required',
                 'string',
                 'between:3,255',
-            ]
+            ],
+            'price' => [
+                'required'
+            ],
+            'description' => [
+                'sometimes'
+            ],
+            'images' => [
+                'sometimes',
+                'array'
+            ],
         ];
     }
 }
