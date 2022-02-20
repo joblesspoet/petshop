@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
-class RegisterRequest extends FormRequest
+class CreateAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -47,9 +47,7 @@ class RegisterRequest extends FormRequest
             ],
             'password' => [
                 'required',
-                Password::min(4)
-                    ->numbers()
-                    ->mixedCase(),
+                Password::min(4),
                 'string',
                 'max:10485760',
                 'confirmed',

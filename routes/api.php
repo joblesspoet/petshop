@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Product\ProductController;
@@ -25,12 +26,12 @@ Route::group([
 
     // admin routes.
     Route::prefix('admin')->group(function () {
-        Route::post('login', [AuthController::class, 'login'])->name('login');
-        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-        Route::post('forgot', [AuthController::class, 'forgot'])->name('forgot.password');
-        Route::post('reset/password', [AuthController::class, 'resetPassword'])->name('forgot.password');
+        Route::post('login', [AdminAuthController::class, 'login'])->name('login');
+        Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::post('forgot', [AdminAuthController::class, 'forgot'])->name('forgot.password');
+        Route::post('reset/password', [AdminAuthController::class, 'resetPassword'])->name('forgot.password');
 
-        Route::middleware(['auth:api','admin'])->group(function () {
+        Route::middleware(['auth:api', 'admin'])->group(function () {
             Route::get('user-listing', [AdminController::class, 'index'])->name('admin.user.listing');
             Route::post('create', [AdminController::class, 'store'])->name('admin.create');
         });
@@ -56,5 +57,10 @@ Route::group([
         Route::get('{uuid}', [ProductController::class, 'show'])->name('product.show');
         Route::match(['put', 'patch'], '{uuid}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('{uuid}', [ProductController::class, 'destroy'])->name('product.delete');
+    });
+
+    // common routes like user profile
+    Route::middleware('auth:api')->group(function () {
+        Route::get('me', [AuthController::class, 'aboutMe'])->name('about.me');
     });
 });

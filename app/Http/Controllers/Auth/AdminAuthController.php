@@ -18,7 +18,7 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\Events\Logout;
 use Tymon\JWTAuth\Validators\PayloadValidator;
-use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\CreateAdminRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -31,7 +31,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Validation\ValidationException;
 
 
-class AuthController extends Controller
+class AdminAuthController extends Controller
 {
     //
     use ThrottlesLogins;
@@ -65,15 +65,15 @@ class AuthController extends Controller
     }
 
     /**
-     * Register a new user.
+     * create a new administrator.
      *
      * @param \Illuminate\Contracts\Hashing\Hasher $hasher
-     * @param \Modules\ApplicationAuth\Http\Requests\Auth\RegisterRequest $request
+     * @param \Modules\ApplicationAuth\Http\Requests\Auth\CreateAdminRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      * @throws \Exception
      */
-    public function register(Hasher $hasher, RegisterRequest $request): JsonResponse
+    public function register(Hasher $hasher, CreateAdminRequest $request): JsonResponse
     {
 
         /** @var App\Models\User $user */
@@ -84,16 +84,15 @@ class AuthController extends Controller
 
         $attributes = Arr::except($request->validated(), ['password']);
 
-        $user = $user ?? new $model();
+        $user = new $model();
         $user->fill(array_merge($attributes));
 
         $user->password = $hasher->make($request->input('password'));
         $user->save();
 
-        // assign role as user...
-        $user->assign(User::ROLE_USER);
+        // assign role as ADMIN...
+        $user->assign(User::ROLE_ADMIN);
 
-        // wasRecentlyCreated property is true if it was created instead of updated
         if (!$user->wasRecentlyCreated) {
             $this->logoutExistingToken();
         } else {
@@ -103,7 +102,7 @@ class AuthController extends Controller
         /** \Illuminate\Http\JsonResponse */
         return new JsonResponse(
             [
-                'message' => "User created successfully.",
+                'message' => "Admin created successfully.",
                 'data' => UserResource::make($user)
             ],
             JsonResponse::HTTP_OK
@@ -137,17 +136,10 @@ class AuthController extends Controller
             /** @var User $user */
             $user = $this->guard->user();
 
-            if (!$user->hasVerifiedEmail()) {
+            if ($user->isNotA(User::ROLE_ADMIN)) {
                 $this->guard->logout();
                 return new JsonResponse([
-                    'error' => trans('Please verify your account in order to login.'),
-                ], JsonResponse::HTTP_NOT_ACCEPTABLE);
-            }
-
-            if ($user->isNotA(User::ROLE_USER)) {
-                $this->guard->logout();
-                return new JsonResponse([
-                    'error' => trans('Only user have rights of role user are allowed to access this.'),
+                    'error' => trans('Only admin are allowed to login through this route.'),
                 ], JsonResponse::HTTP_UNAUTHORIZED);
             }
 
@@ -306,7 +298,7 @@ class AuthController extends Controller
     protected function setupMiddleware(Auth $auth): void
     {
         $this->middleware('auth:' . $this->guardName)
-            ->only('logout', 'changePassword','aboutMe');
+            ->only('logout', 'changePassword', 'aboutMe');
 
         $this->middleware(
             function (Request $request, \Closure $next) use ($auth) {
@@ -314,7 +306,7 @@ class AuthController extends Controller
 
                 return $next($request);
             }
-        )->except('logout', 'changePassword','aboutMe');
+        )->except('logout', 'changePassword', 'aboutMe');
     }
 
 

@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'avatar' => ($avatar = $this->avatar)
                 ? MediaResource::make($avatar)
                 : null,
+            'role' => $this->getRoles()
         ];
     }
 }
